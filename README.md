@@ -42,7 +42,7 @@ Tasks in the system are versatile:
 Our application is built following a **Modular MVC Architecture with a Plugin System**:
 
 - **Model:**  
-  *Strictly* anages data (tasks, users, modules) and logic.
+  *Strictly* manages data (tasks, users, modules) and logic.
 
 - **View:**  
   Renders the user interface. Depending on the chosen approach, this could be a web interface (HTML/CSS/JS via Flask) or a desktop UI (using PyQt).
@@ -72,3 +72,23 @@ Our application is built following a **Modular MVC Architecture with a Plugin Sy
    ```bash
    git clone https://github.com/Eureka401/-gamified-task-manager.git
    cd -gamified-task-manager
+
+---
+
+### Contributing
+Please adhere to the following guidelines:
+
+- Coding Style: Follow PEP8 guidelines.
+- Principles: SOLID, DRY, KISS, and YAGNI principles.
+- Branching: Use feature branches and submit pull requests with clear, descriptive commit messages.
+- Issues: Create GitHub Issues for new features, enhancements, or bug reports.
+- Commits: Follow conventional commits like `feat: <describe the feature>` or `fix: <describe the fix>`
+
+It is also highly encouraged for contributors to be adept in the following:
+- SQL
+- *To add on later*
+
+### Documentation
+Documentation is generated using Sphinx from our codebase docstrings and is located in the docs/ folder. For further details, please refer to the auto-generated documentation or the project wiki.
+
+
