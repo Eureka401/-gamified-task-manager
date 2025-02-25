@@ -88,6 +88,8 @@ It is also highly encouraged for contributors to be adept in the following:
 - SQL
 - *To add on later*
 
+---
+
 ### Documentation
 Documentation is generated using Sphinx from our codebase docstrings and is located in the docs/ folder. For further details, please refer to the auto-generated documentation or the project wiki.
 
