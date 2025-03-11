@@ -39,16 +39,16 @@ Tasks in the system are versatile:
 
 ## Design & Architecture
 
-Our application is built following a **Modular MVC Architecture with a Plugin System**:
+Our application is built following a **Modular MVU Architecture with a Plugin System**:
 
 - **Model:**  
-  *Strictly* manages data (tasks, users, modules) and logic.
+  *Strictly* manages the application's state and data (tasks, users, modules) along with the business logic. The Model is treated as immutable—each update produces a new version of the state.
 
 - **View:**  
-  Renders the user interface. Depending on the chosen approach, this could be a web interface (HTML/CSS/JS via Flask) or a desktop UI (using PyQt).
+  Renders the user interface based solely on the current state (Model). The View is a pure function that translates the state into a visual representation. Depending on the implementation, this could be a web interface (HTML/CSS/JS via Flask) or a desktop UI (using PyQt).
 
-- **Controller:**  
-  Coordinates the interaction between models and views, handling user input and routing it appropriately.
+- **Update:**  
+  Acts as the central coordinator that handles user inputs (or messages). It receives a message along with the current state, computes the next state (Model) based on the logic, and returns this new state. The Update function is responsible for routing user interactions to the appropriate logic, triggering state transitions, and potentially invoking side effects (such as API calls or interactions with plugins).
 
 - **Module/Plugin System:**  
   - A `BaseModule` abstract class will define the interface for all modules.
@@ -64,6 +64,7 @@ Our application is built following a **Modular MVC Architecture with a Plugin Sy
 - Python 3.x installed on your system.
 - Virtual environment tools (e.g., `venv`).
 - Git for version control.
+- `tzdata` installed on your system (`pip -install tzdata`)
 
 ### Installation
 
