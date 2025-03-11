@@ -6,6 +6,8 @@ from typing import Optional
 from itertools import count
 import heapq
 
+from abc import ABC, abstractmethod
+
 
 class TaskStatus(Enum):
     COMPLETE = auto()
@@ -26,6 +28,9 @@ class Scope(Enum):
     LOCAL = auto()
 
 
+type Task_DB = dict[int, Task]
+
+
 @dataclass
 class Task:
     title: str
@@ -39,21 +44,46 @@ class Task:
         default_factory=lambda: datetime.now().astimezone(ZoneInfo("UTC")))
 
 
-def make_task(title: str, priority: Priority, notes: str, scope: Scope = Scope.GLOBAL) -> Task:
-    task_id = generate_task_id()
-    return Task(title, task_id, TaskStatus.TO_DO, priority, scope, notes)
+class TaskIDGenerator(ABC):
+    @abstractmethod
+    def free_task_id(self, task_id: int) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def generate(self) -> int:
+        raise NotImplementedError
 
 
-free_task_ids: list[int] = []
-START = 1
-counter = count(START)
+class Default(TaskIDGenerator):
+    def __init__(self, seed: int):
+        self._start = seed
+        self._free_task_ids: list[int] = []
+        self._counter = count(self._start)
+
+    def free_task_id(self, task_id: int):
+        heapq.heappush(self._free_task_ids, task_id)
+
+    def generate(self) -> int:
+        if self._free_task_ids:
+            return heapq.heappop(self._free_task_ids)
+        return next(self._counter)
 
 
-def free_task_id(task_id: int):
-    heapq.heappush(free_task_ids, task_id)
+class TaskManagementModel:
+    def __init__(self, task_id_generator: TaskIDGenerator, task_database: Task_DB) -> None:
+        self.task_database = task_database
+        self.task_id_generator = task_id_generator
+
+    def make_task(self, title: str, notes: str, priority: Priority = Priority.NONE, scope: Scope = Scope.GLOBAL):
+        task_id = self.task_id_generator.generate()
+        self.save_task_to_db(
+            Task(title, task_id, TaskStatus.TO_DO, priority, scope, notes))
+
+    def save_task_to_db(self, task: Task):
+        key = task.id
+        task_database[key] = task
 
 
-def generate_task_id() -> int:
-    if free_task_ids:
-        return heapq.heappop(free_task_ids)
-    return next(counter)
+task_database: Task_DB = {}
+default_task_id_generator = Default(1)
+model = TaskManagementModel(default_task_id_generator, task_database)
