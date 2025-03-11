@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from typing import Optional
+from typing import Optional, TypeAlias
 
 
 class TaskStatus(Enum):
@@ -24,17 +24,24 @@ class Scope(Enum):
     LOCAL = auto()
 
 
-type Task_DB = dict[int, Task]
+class AppError(Enum):
+    TASK_ID_NOT_FOUND = auto()
+    UNDEFINED_MESSAGE = auto()
 
 
 @dataclass
 class Task:
     title: str
-    id: int
+    task_id: int
     status: TaskStatus
     priority: Priority
     scope: Scope
     notes: str
+    do_date: Optional[datetime] = field(default=None)
+    due_date: Optional[datetime] = field(default=None)
     time_completed: Optional[datetime] = field(default=None)
     time_created: datetime = field(
         default_factory=lambda: datetime.now().astimezone(ZoneInfo("UTC")))
+
+
+TaskDatabase: TypeAlias = dict[int, Task]
