@@ -29,7 +29,7 @@ class AppError(Enum):
     UNDEFINED_MESSAGE = auto()
 
 
-@dataclass
+@dataclass(frozen=True)
 class Task:
     title: str
     task_id: int

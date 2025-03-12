@@ -16,3 +16,9 @@ class MakeTask(Message):
 @dataclass(frozen=True)
 class DeleteTask(Message):
     task_id: int
+
+
+@dataclass(frozen=True)
+class EditTask(Message):
+    task_id: int
+    attributes: Dict[str, Any] = field(default_factory=dict)
