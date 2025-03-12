@@ -1,6 +1,6 @@
-from dataclasses import dataclass
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import Dict, Any
+from project_types import TaskStatus
 
 
 class Message:
@@ -22,3 +22,9 @@ class DeleteTask(Message):
 class EditTask(Message):
     task_id: int
     attributes: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class ChangeTaskStatus(Message):
+    task_id: int
+    task_status: TaskStatus
